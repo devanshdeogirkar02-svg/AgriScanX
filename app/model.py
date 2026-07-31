@@ -1,3 +1,12 @@
+"""
+Model architectures used in AgriScanX.
+
+Contains:
+- EfficientUNetGenerator: Generates NIR images from RGB inputs.
+- PatchGAN: Discriminator used during adversarial training.
+"""
+
+
 import torch
 import torch.nn as nn
 
