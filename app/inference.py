@@ -6,6 +6,7 @@ a Near-Infrared (NIR) image from an RGB input.
 """
 
 import torch
+import numpy as np
 
 from app.model import EfficientUNetGenerator
 from app.preprocess import preprocess_image
@@ -33,7 +34,11 @@ class InferenceEngine:
     @torch.no_grad()
     def predict(self, image_path: str):
 
+        
+
         original_image, input_tensor = preprocess_image(image_path)
+
+        original_image = np.array(original_image)
 
         input_tensor = input_tensor.to(DEVICE)
 
