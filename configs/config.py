@@ -19,6 +19,10 @@ MODEL_DIR = PROJECT_ROOT / "models"
 OUTPUT_DIR = PROJECT_ROOT / "outputs"
 SAMPLE_DIR = PROJECT_ROOT / "sample_images"
 
+# Create directories automatically
+MODEL_DIR.mkdir(exist_ok=True)
+OUTPUT_DIR.mkdir(exist_ok=True)
+
 # ==========================================================
 # Dataset
 # ==========================================================
@@ -53,4 +57,6 @@ LAMBDA_NDVI = 10
 # Device
 # ==========================================================
 
-DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+DEVICE = torch.device(
+    "cuda" if torch.cuda.is_available() else "cpu"
+)

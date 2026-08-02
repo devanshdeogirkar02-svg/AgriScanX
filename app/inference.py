@@ -1,23 +1,51 @@
-from app.model import EfficientUNetGenerator
-from app.preprocess import preprocess_image
-from configs.config import DEVICE, MODEL_PATH, BASE_CHANNELS
+"""
+Inference pipeline for AgriScanX.
+
+Loads the trained model and predicts
+a Near-Infrared (NIR) image from an RGB input.
+"""
 
 import torch
 
+from app.model import EfficientUNetGenerator
+from app.preprocess import preprocess_image
+from configs.config import DEVICE, MODEL_PATH
 
-def load_model():
 
-    model = EfficientUNetGenerator(
-        base_channels=BASE_CHANNELS
-    ).to(DEVICE)
+class InferenceEngine:
+    """
+    Handles model loading and inference.
+    """
 
-    state_dict = torch.load(
-        MODEL_PATH,
-        map_location=DEVICE
-    )
+    def __init__(self):
 
-    model.load_state_dict(state_dict)
+        self.model = EfficientUNetGenerator().to(DEVICE)
 
-    model.eval()
+        checkpoint = torch.load(
+            MODEL_PATH,
+            map_location=DEVICE,
+        )
 
-    return model
+        self.model.load_state_dict(checkpoint)
+
+        self.model.eval()
+
+    @torch.no_grad()
+    def predict(self, image_path: str):
+
+        original_image, input_tensor = preprocess_image(image_path)
+
+        input_tensor = input_tensor.to(DEVICE)
+
+        prediction = self.model(input_tensor)
+
+        prediction = (
+            prediction
+            .squeeze(0)
+            .squeeze(0)
+            .cpu()
+        )
+
+        prediction = prediction * 0.5 + 0.5
+
+        return original_image, prediction.numpy()
