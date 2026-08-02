@@ -39,7 +39,7 @@ PAIRED_DIR = DATA_DIR / "rgb2nir" / "train"
 
 BASE_CHANNELS = 40
 
-MODEL_PATH = MODEL_DIR / "agriscanx_generator.pth"
+MODEL_PATH = MODEL_DIR / "finetuned_epoch40 (1).pth"
 
 # ==========================================================
 # Training
